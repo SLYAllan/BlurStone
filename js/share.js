@@ -5,7 +5,7 @@
  * 🟦 = correct guess, 🟥 = wrong guess, ⬛ = unused attempt
  */
 function buildGuessEmoji(wrongCount, won) {
-  const total = 6;
+  const total = 7;
   const squares = [];
   for (let i = 0; i < total; i++) {
     if (i < wrongCount) {

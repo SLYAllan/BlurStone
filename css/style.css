@@ -47,8 +47,8 @@ body {
 /* ---- App Container ---- */
 #app {
   width: 100%;
-  max-width: 440px;
-  padding: 0 12px;
+  max-width: 900px;
+  padding: 0 16px;
 }
 
 /* ---- Header ---- */
@@ -180,33 +180,81 @@ body {
   font-weight: 600;
 }
 
-/* ---- Card Info Bar (above card) ---- */
-#card-info {
+/* ---- Game Layout (two columns) ---- */
+#game-layout {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+/* Left column: Card image */
+#card-col {
+  flex-shrink: 0;
+}
+
+#card-area {
+  position: relative;
   width: 280px;
-  margin: 0 auto 8px;
+  height: 280px;
+  border: 2px solid var(--gold-dim);
+  border-radius: 0;
+  background: #0e0b08;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+#card-area.state-win {
+  border-color: var(--green);
+  box-shadow: var(--shadow), 0 0 30px rgba(39,174,96,0.4);
+}
+
+#card-area.state-lose {
+  border-color: var(--red);
+  box-shadow: var(--shadow), 0 0 20px rgba(192,57,43,0.3);
+}
+
+#card-canvas {
+  display: block;
+  width: 280px;
+  height: 280px;
+  image-rendering: pixelated;
+}
+
+/* Right column: Info panel */
+#info-col {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ---- Card Info (extension + type) ---- */
+#card-info {
   background: var(--bg2);
   border: 1px solid var(--gold-dim);
   border-radius: var(--radius);
-  padding: 8px 12px;
+  padding: 10px 14px;
 }
 
 #card-info-items {
   display: flex;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .card-info-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.82rem;
+  gap: 8px;
+  font-size: 0.85rem;
 }
 
 .info-icon-img {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -220,46 +268,41 @@ body {
   font-weight: 600;
 }
 
-/* ---- Card Area ---- */
-#card-area {
-  position: relative;
-  width: 280px;
-  height: 280px;
-  margin: 0 auto 14px;
-  border-radius: var(--radius);
-  border: 2px solid var(--gold-dim);
-  background: #0e0b08;
-  box-shadow: var(--shadow), inset 0 0 30px rgba(0,0,0,0.8);
-  overflow: hidden;
-  transition: border-color 0.4s, box-shadow 0.4s;
-}
-
-#card-area.state-win {
-  border-color: var(--green);
-  box-shadow: var(--shadow), 0 0 30px rgba(39,174,96,0.4), inset 0 0 20px rgba(0,0,0,0.6);
-}
-
-#card-area.state-lose {
-  border-color: var(--red);
-  box-shadow: var(--shadow), 0 0 20px rgba(192,57,43,0.3), inset 0 0 20px rgba(0,0,0,0.6);
-}
-
-#card-canvas {
-  display: block;
-  width: 280px;
-  height: 280px;
-  image-rendering: pixelated;
+/* ---- Try counter + dots ---- */
+#guess-area {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 #try-counter {
-  position: absolute;
-  bottom: 6px;
-  right: 8px;
-  font-size: 0.75rem;
-  color: var(--gold-dim);
-  background: rgba(0,0,0,0.6);
-  padding: 2px 6px;
-  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+#guess-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--gold-dim);
+  display: inline-block;
+}
+.dot-used {
+  background: var(--red);
+  border-color: var(--red);
+}
+.dot-empty {
+  background: transparent;
+}
+
+#remaining-text {
+  font-size: 0.78rem;
+  color: var(--text-dim);
 }
 
 /* ---- Result overlay ---- */
@@ -288,56 +331,20 @@ body {
   opacity: 0.9;
 }
 
-/* ---- Guess dots ---- */
-#guess-area {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-}
-
-#guess-dots {
-  display: flex;
-  gap: 6px;
-}
-
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2px solid var(--gold-dim);
-  display: inline-block;
-}
-.dot-used {
-  background: var(--red);
-  border-color: var(--red);
-}
-.dot-empty {
-  background: transparent;
-}
-
-#remaining-text {
-  font-size: 0.8rem;
-  color: var(--text-dim);
-}
-
 /* ---- Hints ---- */
 #hints-section {
   background: var(--bg2);
   border: 1px solid var(--bg3);
   border-radius: var(--radius);
-  padding: 12px;
-  margin-bottom: 12px;
+  padding: 10px 12px;
 }
 
 #hints-label {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--gold-dim);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 #hints-container {
@@ -350,9 +357,9 @@ body {
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 10px;
+  padding: 4px 10px;
   border-radius: 20px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   transition: all 0.3s;
   cursor: default;
 }
@@ -370,8 +377,9 @@ body {
 }
 
 .hint-icon {
-  font-size: 0.9rem;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
 
 .hint-label {
@@ -402,7 +410,7 @@ body {
 }
 
 .hint-unlock {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--text-muted);
   font-style: italic;
   margin-left: 2px;
@@ -415,28 +423,27 @@ body {
 
 .hint-text-full .hint-value {
   font-weight: 400;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   line-height: 1.4;
 }
 
 /* ---- Wrong guesses ---- */
 #wrong-section {
-  margin-bottom: 12px;
-  min-height: 28px;
+  min-height: 20px;
 }
 
 #wrong-label {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--text-muted);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 #wrong-guesses {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 4px;
 }
 
 .wrong-pill {
@@ -444,8 +451,8 @@ body {
   border: 1px solid rgba(192, 57, 43, 0.5);
   color: #e07060;
   border-radius: 20px;
-  padding: 3px 10px;
-  font-size: 0.8rem;
+  padding: 2px 8px;
+  font-size: 0.75rem;
 }
 
 /* ---- Search / Autocomplete ---- */
@@ -722,29 +729,50 @@ body {
 }
 
 /* ---- Responsive ---- */
-@media (min-width: 480px) {
-  #app {
-    padding: 0 20px;
-  }
-  #card-info {
-    width: 300px;
-  }
+
+/* Desktop: wider card */
+@media (min-width: 700px) {
   #card-area {
-    width: 300px;
-    height: 300px;
+    width: 350px;
+    height: 350px;
   }
   #card-canvas {
-    width: 300px;
-    height: 300px;
+    width: 350px;
+    height: 350px;
+  }
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 600px) {
+  #game-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+  #info-col {
+    width: 100%;
+    min-width: unset;
+  }
+  #card-area {
+    width: 280px;
+    height: 280px;
+  }
+  #card-canvas {
+    width: 280px;
+    height: 280px;
+  }
+  #card-info-items {
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
+  }
+  #guess-area {
+    align-items: center;
   }
 }
 
 @media (max-width: 360px) {
   #app-title {
     font-size: 1.25rem;
-  }
-  #card-info {
-    width: 260px;
   }
   #card-area {
     width: 260px;
@@ -755,7 +783,7 @@ body {
     height: 260px;
   }
   .hint-chip {
-    font-size: 0.75rem;
-    padding: 4px 8px;
+    font-size: 0.72rem;
+    padding: 3px 7px;
   }
 }

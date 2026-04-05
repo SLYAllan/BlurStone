@@ -1,7 +1,7 @@
 // canvas.js — Pixelation rendering engine
 
-// Pixel grid sizes for each level (0 = most pixelated, 6 = full res)
-const PIXEL_LEVELS = [2, 4, 7, 12, 24, 48, 256];
+// Pixel grid sizes for each level (0 = most pixelated, 7 = full res)
+const PIXEL_LEVELS = [2, 4, 7, 12, 20, 36, 64, 256];
 const CANVAS_SIZE = 280; // display size in px
 
 let _canvas = null;
@@ -128,7 +128,7 @@ function animateReveal(startLevel, onDone) {
 
   function step() {
     renderLevel(level);
-    if (level < 6) {
+    if (level < PIXEL_LEVELS.length - 1) {
       level++;
       _revealAnimTimer = setTimeout(step, 120);
     } else {
