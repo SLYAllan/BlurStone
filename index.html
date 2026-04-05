@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HearthBlur</title>
+  <meta name="description" content="Devinez la carte Hearthstone à partir de son illustration floue / Guess the Hearthstone card from its blurred artwork" />
+  <meta property="og:title" content="HearthBlur" />
+  <meta property="og:description" content="Devinez la carte Hearthstone à partir de son illustration floue" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://slyallan.github.io/BlurStone" />
+  <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="app" role="main">
+
+    <!-- Header -->
+    <header id="header">
+      <div id="header-left">
+        <h1 id="app-title">HearthBlur</h1>
+        <button id="how-to-btn" aria-label="Comment jouer" title="Comment jouer">?</button>
+      </div>
+      <div id="header-right">
+        <button id="lang-btn" data-lang="fr" aria-label="Changer la langue">🌐 FR</button>
+      </div>
+    </header>
+
+    <!-- Subtitle -->
+    <p id="subtitle">Devinez la carte à partir de son illustration floue</p>
+
+    <!-- Score bar -->
+    <div id="score-bar" aria-label="Statistiques">
+      <div class="score-item">
+        <span class="score-label" id="score-label">Score :</span>
+        <span class="score-value" id="score-value">0</span>
+      </div>
+      <div class="score-item">
+        <span class="score-label" id="streak-label">Série :</span>
+        <span class="score-value" id="streak-value">0</span>
+      </div>
+    </div>
+
+    <!-- Mode tabs -->
+    <div id="mode-tabs" role="tablist" aria-label="Mode de jeu">
+      <button class="mode-btn active" data-mode="unlimited" role="tab" aria-selected="true">Illimité</button>
+      <button class="mode-btn" data-mode="daily" role="tab" aria-selected="false">Quotidien</button>
+    </div>
+
+    <!-- Card artwork area -->
+    <div id="card-area" aria-label="Illustration de la carte">
+      <canvas id="card-canvas" role="img" aria-label="Illustration pixelisée de la carte"></canvas>
+      <div id="try-counter" aria-live="polite">Essai 0/6</div>
+
+      <!-- Result overlay (win/lose) — inside card area -->
+      <div id="result-overlay" class="result-overlay hidden" aria-live="assertive" role="status">
+        <div id="result-text"></div>
+        <div id="result-card"></div>
+      </div>
+    </div>
+
+    <!-- Guess progress dots -->
+    <div id="guess-area" aria-label="Progression des essais">
+      <div id="guess-dots" role="group" aria-label="Essais utilisés"></div>
+      <span id="remaining-text" aria-live="polite">6 essais restants</span>
+    </div>
+
+    <!-- Hints -->
+    <section id="hints-section" aria-label="Indices">
+      <div id="hints-label">Indices</div>
+      <div id="hints-container" role="list" aria-label="Indices révélés"></div>
+    </section>
+
+    <!-- Wrong guesses -->
+    <section id="wrong-section" aria-label="Mauvaises réponses">
+      <div id="wrong-label">Mauvaises réponses</div>
+      <div id="wrong-guesses" role="list" aria-label="Cartes incorrectes devinées"></div>
+    </section>
+
+    <!-- Search input + autocomplete -->
+    <div id="search-wrapper">
+      <input
+        type="search"
+        id="search-input"
+        placeholder="Chercher une carte..."
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-label="Chercher une carte"
+        aria-autocomplete="list"
+        aria-controls="autocomplete-list"
+        role="combobox"
+        aria-expanded="false"
+      />
+      <ul
+        id="autocomplete-list"
+        class="hidden"
+        role="listbox"
+        aria-label="Suggestions de cartes"
+      ></ul>
+    </div>
+
+    <!-- Skip button -->
+    <button id="skip-btn" aria-label="Passer cette carte">Passer →</button>
+
+    <!-- Action buttons (shown after game ends) -->
+    <div id="action-buttons">
+      <button id="next-btn" class="hidden" aria-label="Carte suivante">Carte suivante</button>
+      <button id="share-btn" class="hidden" aria-label="Partager le résultat">Partager</button>
+    </div>
+
+  </div><!-- /#app -->
+
+  <!-- Loading overlay -->
+  <div id="loading-overlay" role="status" aria-live="polite">
+    <div class="loading-spinner" aria-hidden="true"></div>
+    <div class="loading-text">Chargement des cartes...</div>
+  </div>
+
+  <!-- How-to modal -->
+  <div id="how-to-modal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="how-to-title" tabindex="-1">
+    <div class="modal-box">
+      <h2 id="how-to-title">Comment jouer</h2>
+      <p id="how-to-body">L'illustration d'une carte Hearthstone est pixelisée. Tapez un nom de carte pour deviner. À chaque erreur, l'image se dépixelise et un nouvel indice apparaît. Vous avez 6 essais.</p>
+      <button id="how-to-close">Fermer</button>
+    </div>
+  </div>
+
+  <!-- Share toast -->
+  <div id="share-toast" class="hidden" role="status" aria-live="polite"></div>
+
+  <!-- Scripts (order matters: dependencies first) -->
+  <script src="js/i18n.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/canvas.js"></script>
+  <script src="js/hints.js"></script>
+  <script src="js/share.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
