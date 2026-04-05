@@ -37,6 +37,155 @@ const SET_NAMES = {
   WHIZBANGS_WORKSHOP: { en: "Whizbang's Workshop", fr: "L'Atelier de Mirobolus" },
   ISLAND_VACATION: { en: "Perils in Paradise", fr: "Périls au Paradis" },
   SPACE: { en: "The Great Dark Beyond", fr: "Le Grand Néant" },
+  EMERALD_DREAM: { en: "Into the Emerald Dream", fr: "Dans le Rêve d'émeraude" },
+  EDR: { en: "Into the Emerald Dream", fr: "Dans le Rêve d'émeraude" },
+  THE_LOST_CITY: { en: "The Lost City of Un'Goro", fr: "La Cité perdue d'Un'Goro" },
+  TLC: { en: "The Lost City of Un'Goro", fr: "La Cité perdue d'Un'Goro" },
+  CATACLYSM: { en: "Cataclysm", fr: "Cataclysme" },
+  CATA: { en: "Cataclysm", fr: "Cataclysme" },
+  TIME_TRAVEL: { en: "Across the Timeways", fr: "À travers les Voies du temps" },
+  TIME: { en: "Across the Timeways", fr: "À travers les Voies du temps" },
+};
+
+const SET_ICONS = {
+  // Base sets
+  'CORE': 'logo/extensions/Core.svg',
+  'BASIC': 'logo/extensions/Basic_-_SVG_logo.svg',
+  'EXPERT1': 'logo/extensions/ClassicIcon.webp',
+  'VANILLA': 'logo/extensions/Classic.webp',
+  'LEGACY': 'logo/extensions/ClassicIcon.webp',
+  'HOF': 'logo/extensions/HallOfFameIcon.webp',
+
+  // 2014
+  'NAXX': 'logo/extensions/NaxxIcon.webp',
+  'FP1': 'logo/extensions/NaxxIcon.webp',
+  'GVG': 'logo/extensions/GvGIcon.webp',
+  'PE1': 'logo/extensions/GvGIcon.webp',
+
+  // 2015
+  'BRM': 'logo/extensions/BRMIcon.webp',
+  'FP2': 'logo/extensions/BRMIcon.webp',
+  'TGT': 'logo/extensions/TGTIcon.webp',
+  'LOE': 'logo/extensions/LOEIcon.webp',
+
+  // 2016
+  'OG': 'logo/extensions/OGIcon.webp',
+  'OG_RESERVE': 'logo/extensions/OGIcon.webp',
+  'KARA': 'logo/extensions/KaraIcon.webp',
+  'KARA_RESERVE': 'logo/extensions/KaraIcon.webp',
+  'GANGS': 'logo/extensions/GangsIcon.webp',
+  'GANGS_RESERVE': 'logo/extensions/GangsIcon.webp',
+
+  // 2017
+  'UNGORO': 'logo/extensions/UNGIcon.webp',
+  'ICECROWN': 'logo/extensions/ICCIcon.webp',
+  'LOOTAPALOOZA': 'logo/extensions/LOOTIcon.webp',
+
+  // 2018
+  'GILNEAS': 'logo/extensions/GILIcon.webp',
+  'BOOMSDAY': 'logo/extensions/BOTIcon.webp',
+  'TROLL': 'logo/extensions/TRLIcon.webp',
+
+  // 2019
+  'DALARAN': 'logo/extensions/DALIcon.webp',
+  'ULDUM': 'logo/extensions/UldumIcon.webp',
+  'DRAGONS': 'logo/extensions/DRGIcon.webp',
+  'DRG': 'logo/extensions/DRGIcon.webp',
+  'YEAR_OF_THE_DRAGON': 'logo/extensions/YODIcon.webp',
+  'YOD': 'logo/extensions/YODIcon.webp',
+
+  // 2020
+  'BLACK_TEMPLE': 'logo/extensions/BTIcon.webp',
+  'BT': 'logo/extensions/BTIcon.webp',
+  'DEMON_HUNTER_INITIATE': 'logo/extensions/DHIIcon.webp',
+  'DHI': 'logo/extensions/DHIIcon.webp',
+  'SCHOLOMANCE': 'logo/extensions/SCHIcon.webp',
+  'SCH': 'logo/extensions/SCHIcon.webp',
+  'DARKMOON_FAIRE': 'logo/extensions/DMFIcon.webp',
+  'DMF': 'logo/extensions/DMFIcon.webp',
+
+  // 2021
+  'THE_BARRENS': 'logo/extensions/Forged_in_the_Barrens_-_SVG_logo.svg',
+  'BAR': 'logo/extensions/Forged_in_the_Barrens_-_SVG_logo.svg',
+  'WAILING_CAVERNS': 'logo/extensions/BARIcon_MiniSet.webp',
+  'STORMWIND': 'logo/extensions/SWIcon.webp',
+  'SW': 'logo/extensions/SWIcon.webp',
+  'ALTERAC_VALLEY': 'logo/extensions/Fractured_in_Alterac_Valley_-_SVG_logo.svg',
+  'AV': 'logo/extensions/Fractured_in_Alterac_Valley_-_SVG_logo.svg',
+
+  // 2022
+  'THE_SUNKEN_CITY': 'logo/extensions/Voyage_to_the_Sunken_City_-_SVG_logo.webp',
+  'TSC': 'logo/extensions/Voyage_to_the_Sunken_City_-_SVG_logo.webp',
+  'REVENDRETH': 'logo/extensions/revendreth.svg',
+  'REVENDETH': 'logo/extensions/revendreth.svg',
+  'REV': 'logo/extensions/revendreth.svg',
+  'RETURN_OF_THE_LICH_KING': 'logo/extensions/RETURN_OF_THE_LICH_KING.svg',
+  'RLK': 'logo/extensions/RETURN_OF_THE_LICH_KING.svg',
+  'PATH_OF_ARTHAS': 'logo/extensions/PoAIcon.webp',
+  'PA': 'logo/extensions/PoAIcon.webp',
+
+  // 2023
+  'BATTLE_OF_THE_BANDS': 'logo/extensions/BATTLE_OF_THE_BANDS.svg',
+  'ETC': 'logo/extensions/BATTLE_OF_THE_BANDS.svg',
+  'TITANS': 'logo/extensions/TTNIcon.webp',
+  'TTN': 'logo/extensions/TTNIcon.webp',
+  'WILD_WEST': 'logo/extensions/Showdown_in_the_Badlands_-_SVG_logo.svg',
+  'WST': 'logo/extensions/Showdown_in_the_Badlands_-_SVG_logo.svg',
+
+  // 2024
+  'WHIZBANGS_WORKSHOP': "logo/extensions/Whizbang's_Workshop_-_SVG_logo.svg",
+  'TOY': "logo/extensions/Whizbang's_Workshop_-_SVG_logo.svg",
+  'ISLAND_VACATION': 'logo/extensions/Perils_in_Paradise_-_SVG_logo.svg',
+  'VAC': 'logo/extensions/Perils_in_Paradise_-_SVG_logo.svg',
+  'GREAT_DARK_BEYOND': 'logo/extensions/The_Great_Dark_Beyond_-_SVG_logo.svg',
+  'GDB': 'logo/extensions/The_Great_Dark_Beyond_-_SVG_logo.svg',
+  'SPACE': 'logo/extensions/The_Great_Dark_Beyond_-_SVG_logo.svg',
+
+  // 2025
+  'EMERALD_DREAM': 'logo/extensions/Into_the_Emerald_Dream_-_SVG_logo.svg',
+  'EDR': 'logo/extensions/Into_the_Emerald_Dream_-_SVG_logo.svg',
+  'THE_LOST_CITY': "logo/extensions/The_Lost_City_of_Un'Goro_-_SVG_logo.svg",
+  'TLC': "logo/extensions/The_Lost_City_of_Un'Goro_-_SVG_logo.svg",
+  'CATACLYSM': 'logo/extensions/CATACLYSM_-_SVG_logo.svg',
+  'CATA': 'logo/extensions/CATACLYSM_-_SVG_logo.svg',
+  'TIME_TRAVEL': 'logo/extensions/Across_the_Timeways_-_SVG_logo.svg',
+  'TIME': 'logo/extensions/Across_the_Timeways_-_SVG_logo.svg',
+  'TAVERNS_OF_TIME': 'logo/extensions/Across_the_Timeways_-_SVG_logo.svg',
+
+  // Misc
+  'WONDERS': 'logo/extensions/TwistIcon.webp',
+  'WON': 'logo/extensions/TwistIcon.webp',
+  'EVENT': 'logo/extensions/Event_-_SVG_logo.svg',
+  'EVE': 'logo/extensions/Event_-_SVG_logo.svg',
+};
+
+const CLASS_ICONS = {
+  'MAGE': 'logo/Class/Mage_icon.webp',
+  'WARRIOR': 'logo/Class/Warrior_icon.webp',
+  'PALADIN': 'logo/Class/Paladin_icon.webp',
+  'HUNTER': 'logo/Class/Hunter_icon.webp',
+  'ROGUE': 'logo/Class/Rogue_icon.webp',
+  'PRIEST': 'logo/Class/Priest_icon.webp',
+  'SHAMAN': 'logo/Class/Shaman_icon.webp',
+  'WARLOCK': 'logo/Class/Warlock_icon.webp',
+  'DRUID': 'logo/Class/Druid_icon.webp',
+  'DEATHKNIGHT': 'logo/Class/Death_Knight_icon.webp',
+  'DEMONHUNTER': 'logo/Class/Demon_Hunter_icon.webp',
+  'NEUTRAL': 'logo/Icon_Logo.webp',
+};
+
+const RARITY_ICONS = {
+  'FREE': 'logo/Icon_Logo.webp',
+  'COMMON': 'logo/rarity/Common.webp',
+  'RARE': 'logo/rarity/Rare.webp',
+  'EPIC': 'logo/rarity/Epic.webp',
+  'LEGENDARY': 'logo/rarity/Legendary.webp',
+};
+
+const STAT_ICONS = {
+  mana: 'logo/Mana.webp',
+  attack: 'logo/Attack_icon_large.webp',
+  health: 'logo/Health_icon_large.webp',
 };
 
 const i18n = {
