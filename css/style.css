@@ -180,6 +180,46 @@ body {
   font-weight: 600;
 }
 
+/* ---- Card Info Bar (above card) ---- */
+#card-info {
+  width: 280px;
+  margin: 0 auto 8px;
+  background: var(--bg2);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+}
+
+#card-info-items {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.card-info-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+}
+
+.info-icon-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.info-label {
+  color: var(--text-dim);
+}
+
+.info-value {
+  color: var(--gold-light);
+  font-weight: 600;
+}
+
 /* ---- Card Area ---- */
 #card-area {
   position: relative;
@@ -349,16 +389,16 @@ body {
   cursor: help;
 }
 
-.hint-base {
-  background: linear-gradient(135deg, #2a3d12 0%, #1d2d10 100%);
-  border-color: #4a6a2a;
-}
-
 .hint-icon-img {
   width: 18px;
   height: 18px;
   object-fit: contain;
   vertical-align: middle;
+}
+
+.hint-icon-locked {
+  opacity: 0.3;
+  filter: grayscale(1);
 }
 
 .hint-unlock {
@@ -686,6 +726,9 @@ body {
   #app {
     padding: 0 20px;
   }
+  #card-info {
+    width: 300px;
+  }
   #card-area {
     width: 300px;
     height: 300px;
@@ -699,6 +742,9 @@ body {
 @media (max-width: 360px) {
   #app-title {
     font-size: 1.25rem;
+  }
+  #card-info {
+    width: 260px;
   }
   #card-area {
     width: 260px;

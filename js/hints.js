@@ -12,7 +12,7 @@ const HINT_UNLOCK_AT = [2, 4, 6]; // wrong guess # needed to unlock each hint
  * @param {object} card - card data object
  * @param {string} hintType - 'type'|'set'|'cost'|'class'|'text'
  * @param {string} lang - 'fr'|'en'
- * @returns {{ label: string, value: string, note: string|null, icon: string, iconImg: string|null }}
+ * @returns {{ label: string, value: string, note: string|null, iconImg: string|null }}
  */
 function getHintData(card, hintType, lang) {
   const t = i18n[lang];
@@ -30,8 +30,7 @@ function getHintData(card, hintType, lang) {
         label: t.hintType,
         value: typeMap[card.type] || card.type,
         note: null,
-        icon: '🃏',
-        iconImg: null,
+        iconImg: 'logo/Icon_Logo.webp',
       };
     }
 
@@ -42,7 +41,6 @@ function getHintData(card, hintType, lang) {
         label: t.hintSet,
         value: setName,
         note: null,
-        icon: '📦',
         iconImg: setIcon,
       };
     }
@@ -52,7 +50,6 @@ function getHintData(card, hintType, lang) {
         label: t.hintCost,
         value: card.cost != null ? String(card.cost) : '?',
         note: null,
-        icon: '💎',
         iconImg: STAT_ICONS.mana || null,
       };
     }
@@ -65,7 +62,6 @@ function getHintData(card, hintType, lang) {
         label: t.hintClass,
         value: displayName,
         note: null,
-        icon: '⚔️',
         iconImg: classIcon,
       };
     }
@@ -77,21 +73,17 @@ function getHintData(card, hintType, lang) {
         label: t.hintText,
         value: cleanText || t.hintNA,
         note: null,
-        icon: '📜',
         iconImg: null,
       };
     }
 
     default:
-      return { label: hintType, value: '?', note: null, icon: '❓', iconImg: null };
+      return { label: hintType, value: '?', note: null, iconImg: null };
   }
 }
 
 /**
  * Get base info that is always visible (extension + type).
- * @param {object} card
- * @param {string} lang
- * @returns {Array<{ type: string, revealed: boolean, label: string, value: string, icon: string, iconImg: string|null }>}
  */
 function getBaseInfo(card, lang) {
   return BASE_INFO.map(type => ({
@@ -104,10 +96,6 @@ function getBaseInfo(card, lang) {
 /**
  * Get all progressive hints with their revealed/locked state.
  * Hints unlock at wrong guess counts defined in HINT_UNLOCK_AT.
- * @param {object} card
- * @param {number} wrongGuessCount - number of wrong guesses so far
- * @param {string} lang
- * @returns {Array<{ type: string, revealed: boolean, unlockAt: number, label: string, value: string, icon: string, iconImg: string|null }>}
  */
 function getAllHints(card, wrongGuessCount, lang) {
   return HINT_SEQUENCE.map((hintType, idx) => {
@@ -115,7 +103,7 @@ function getAllHints(card, wrongGuessCount, lang) {
     const revealed = wrongGuessCount >= unlockAt;
     const data = revealed
       ? getHintData(card, hintType, lang)
-      : { label: getLabelForType(hintType, lang), value: '?', note: null, icon: '🔒', iconImg: null };
+      : { label: getLabelForType(hintType, lang), value: '?', note: null, iconImg: null };
     return {
       type: hintType,
       revealed,

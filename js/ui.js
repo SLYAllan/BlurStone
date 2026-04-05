@@ -25,6 +25,7 @@ function initUI(callbacks) {
 
   // Cache DOM refs
   el.canvas = document.getElementById('card-canvas');
+  el.cardInfoItems = document.getElementById('card-info-items');
   el.tryCounter = document.getElementById('try-counter');
   el.guessDots = document.getElementById('guess-dots');
   el.hintsContainer = document.getElementById('hints-container');
@@ -117,7 +118,7 @@ function setActiveMode(mode, lang) {
 
 function setLang(lang) {
   el.langBtn.dataset.lang = lang;
-  el.langBtn.textContent = '🌐 ' + lang.toUpperCase();
+  el.langBtn.textContent = lang.toUpperCase();
 }
 
 // ---- Try counter ----
@@ -148,23 +149,24 @@ function updateTryCounter(guessesLeft, totalGuesses, lang) {
 function renderHints(card, wrongGuessCount, lang) {
   const baseInfo = getBaseInfo(card, lang);
   const hints = getAllHints(card, wrongGuessCount, lang);
-  el.hintsContainer.innerHTML = '';
 
-  // Render base info (always visible)
+  // Render base info in the top card-info bar (above card image)
+  el.cardInfoItems.innerHTML = '';
   baseInfo.forEach(info => {
-    const chip = document.createElement('div');
-    chip.className = 'hint-chip hint-revealed hint-base';
-    chip.setAttribute('aria-label', `${info.label}: ${info.value}`);
+    const item = document.createElement('div');
+    item.className = 'card-info-item';
+    item.setAttribute('aria-label', `${info.label}: ${info.value}`);
 
     const iconHtml = info.iconImg
-      ? `<span class="hint-icon"><img src="${info.iconImg}" class="hint-icon-img" alt=""></span>`
-      : `<span class="hint-icon">${info.icon}</span>`;
+      ? `<img src="${info.iconImg}" class="info-icon-img" alt="">`
+      : '';
 
-    chip.innerHTML = `${iconHtml}<span class="hint-label">${escHtml(info.label)}:</span><span class="hint-value">${escHtml(info.value)}</span>`;
-    el.hintsContainer.appendChild(chip);
+    item.innerHTML = `${iconHtml}<span class="info-label">${escHtml(info.label)}:</span><span class="info-value">${escHtml(info.value)}</span>`;
+    el.cardInfoItems.appendChild(item);
   });
 
-  // Render progressive hints
+  // Render progressive hints below card
+  el.hintsContainer.innerHTML = '';
   hints.forEach(hint => {
     const chip = document.createElement('div');
     chip.className = 'hint-chip' + (hint.revealed ? ' hint-revealed' : ' hint-locked');
@@ -173,16 +175,16 @@ function renderHints(card, wrongGuessCount, lang) {
       chip.classList.add('hint-text-full');
     }
 
-    chip.setAttribute('aria-label', hint.revealed ? `${hint.label}: ${hint.value}` : `${hint.label} verrouillé`);
+    chip.setAttribute('aria-label', hint.revealed ? `${hint.label}: ${hint.value}` : `${hint.label} verrouille`);
 
     if (hint.revealed) {
       const iconHtml = hint.iconImg
         ? `<span class="hint-icon"><img src="${hint.iconImg}" class="hint-icon-img" alt=""></span>`
-        : `<span class="hint-icon">${hint.icon}</span>`;
+        : '';
       chip.innerHTML = `${iconHtml}<span class="hint-label">${escHtml(hint.label)}:</span><span class="hint-value">${escHtml(hint.value)}</span>`;
     } else {
       const unlockLabel = lang === 'fr' ? `essai ${hint.unlockAt}` : `guess ${hint.unlockAt}`;
-      chip.innerHTML = `<span class="hint-icon">🔒</span><span class="hint-label">${escHtml(hint.label)}</span><span class="hint-unlock">(${unlockLabel})</span>`;
+      chip.innerHTML = `<span class="hint-icon"><img src="logo/Icon_Logo.webp" class="hint-icon-img hint-icon-locked" alt=""></span><span class="hint-label">${escHtml(hint.label)}</span><span class="hint-unlock">(${unlockLabel})</span>`;
     }
 
     el.hintsContainer.appendChild(chip);

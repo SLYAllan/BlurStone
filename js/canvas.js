@@ -1,7 +1,7 @@
 // canvas.js — Pixelation rendering engine
 
 // Pixel grid sizes for each level (0 = most pixelated, 6 = full res)
-const PIXEL_LEVELS = [5, 8, 14, 24, 40, 72, 256];
+const PIXEL_LEVELS = [2, 4, 7, 12, 24, 48, 256];
 const CANVAS_SIZE = 280; // display size in px
 
 let _canvas = null;

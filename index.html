@@ -47,6 +47,11 @@
       <button class="mode-btn" data-mode="daily" role="tab" aria-selected="false">Quotidien</button>
     </div>
 
+    <!-- Card info (extension + type) — always visible above card -->
+    <div id="card-info" aria-label="Informations de la carte">
+      <div id="card-info-items"></div>
+    </div>
+
     <!-- Card artwork area -->
     <div id="card-area" aria-label="Illustration de la carte">
       <canvas id="card-canvas" role="img" aria-label="Illustration pixelisée de la carte"></canvas>
@@ -65,7 +70,7 @@
       <span id="remaining-text" aria-live="polite">6 essais restants</span>
     </div>
 
-    <!-- Hints -->
+    <!-- Hints (progressive: cost, class, text) -->
     <section id="hints-section" aria-label="Indices">
       <div id="hints-label">Indices</div>
       <div id="hints-container" role="list" aria-label="Indices révélés"></div>
