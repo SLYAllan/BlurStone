@@ -1,15 +1,18 @@
 // hints.js — Hint computation for each card type
 
-// Hint sequence (revealed after wrong guess #N)
-// Index 0 = revealed after 1st wrong guess, etc.
-const HINT_SEQUENCE = ['type', 'cost', 'set', 'attack', 'health'];
+// Base info (always visible from the start)
+const BASE_INFO = ['set', 'type'];
+
+// Progressive hints revealed at specific wrong guess counts
+const HINT_SEQUENCE = ['cost', 'class', 'text'];
+const HINT_UNLOCK_AT = [2, 4, 6]; // wrong guess # needed to unlock each hint
 
 /**
  * Compute a hint's display data for a card.
  * @param {object} card - card data object
- * @param {string} hintType - 'type'|'cost'|'set'|'attack'|'health'
+ * @param {string} hintType - 'type'|'set'|'cost'|'class'|'text'
  * @param {string} lang - 'fr'|'en'
- * @returns {{ label: string, value: string, note: string|null }}
+ * @returns {{ label: string, value: string, note: string|null, icon: string, iconImg: string|null }}
  */
 function getHintData(card, hintType, lang) {
   const t = i18n[lang];
@@ -28,6 +31,19 @@ function getHintData(card, hintType, lang) {
         value: typeMap[card.type] || card.type,
         note: null,
         icon: '🃏',
+        iconImg: null,
+      };
+    }
+
+    case 'set': {
+      const setName = SET_NAMES[card.set]?.[lang] || card.set;
+      const setIcon = SET_ICONS[card.set] || null;
+      return {
+        label: t.hintSet,
+        value: setName,
+        note: null,
+        icon: '📦',
+        iconImg: setIcon,
       };
     }
 
@@ -37,89 +53,73 @@ function getHintData(card, hintType, lang) {
         value: card.cost != null ? String(card.cost) : '?',
         note: null,
         icon: '💎',
+        iconImg: STAT_ICONS.mana || null,
       };
     }
 
-    case 'set': {
-      const setName = SET_NAMES[card.set]?.[lang] || card.set;
+    case 'class': {
+      const className = card.cardClass || 'NEUTRAL';
+      const classIcon = CLASS_ICONS[className] || null;
+      const displayName = CLASS_NAMES[className]?.[lang] || className;
       return {
-        label: t.hintSet,
-        value: setName,
-        note: null,
-        icon: '📦',
-      };
-    }
-
-    case 'attack': {
-      if (['SPELL', 'LOCATION', 'HERO'].includes(card.type)) {
-        return {
-          label: t.hintAttack,
-          value: t.hintNA,
-          note: card.type === 'SPELL' ? t.hintNoStats : null,
-          icon: '⚔️',
-        };
-      }
-      return {
-        label: t.hintAttack,
-        value: card.attack != null ? String(card.attack) : '0',
+        label: t.hintClass,
+        value: displayName,
         note: null,
         icon: '⚔️',
+        iconImg: classIcon,
       };
     }
 
-    case 'health': {
-      if (card.type === 'SPELL') {
-        return {
-          label: t.hintHealth,
-          value: t.hintNA,
-          note: t.hintNoStats,
-          icon: '❤️',
-        };
-      }
-      if (card.type === 'WEAPON') {
-        return {
-          label: t.hintDurability,
-          value: card.durability != null ? String(card.durability) : (card.health != null ? String(card.health) : '0'),
-          note: null,
-          icon: '🛡️',
-        };
-      }
-      if (card.type === 'HERO') {
-        return {
-          label: t.hintArmor,
-          value: card.armor != null ? String(card.armor) : '0',
-          note: null,
-          icon: '🛡️',
-        };
-      }
-      // MINION, LOCATION
+    case 'text': {
+      const rawText = card.text || '';
+      const cleanText = rawText.replace(/<[^>]+>/g, '').replace(/\n/g, ' ').trim();
       return {
-        label: t.hintHealth,
-        value: card.health != null ? String(card.health) : '0',
+        label: t.hintText,
+        value: cleanText || t.hintNA,
         note: null,
-        icon: '❤️',
+        icon: '📜',
+        iconImg: null,
       };
     }
 
     default:
-      return { label: hintType, value: '?', note: null, icon: '❓' };
+      return { label: hintType, value: '?', note: null, icon: '❓', iconImg: null };
   }
 }
 
 /**
- * Get all hints with their revealed/locked state.
+ * Get base info that is always visible (extension + type).
  * @param {object} card
- * @param {number} revealedCount - how many hints have been revealed (= wrong guesses so far)
  * @param {string} lang
- * @returns {Array<{ type: string, revealed: boolean, label: string, value: string, note: string|null, icon: string }>}
+ * @returns {Array<{ type: string, revealed: boolean, label: string, value: string, icon: string, iconImg: string|null }>}
  */
-function getAllHints(card, revealedCount, lang) {
+function getBaseInfo(card, lang) {
+  return BASE_INFO.map(type => ({
+    type,
+    revealed: true,
+    ...getHintData(card, type, lang),
+  }));
+}
+
+/**
+ * Get all progressive hints with their revealed/locked state.
+ * Hints unlock at wrong guess counts defined in HINT_UNLOCK_AT.
+ * @param {object} card
+ * @param {number} wrongGuessCount - number of wrong guesses so far
+ * @param {string} lang
+ * @returns {Array<{ type: string, revealed: boolean, unlockAt: number, label: string, value: string, icon: string, iconImg: string|null }>}
+ */
+function getAllHints(card, wrongGuessCount, lang) {
   return HINT_SEQUENCE.map((hintType, idx) => {
-    const revealed = idx < revealedCount;
-    const data = revealed ? getHintData(card, hintType, lang) : { label: getLabelForType(hintType, lang), value: '?', note: null, icon: '🔒' };
+    const unlockAt = HINT_UNLOCK_AT[idx];
+    const revealed = wrongGuessCount >= unlockAt;
+    const data = revealed
+      ? getHintData(card, hintType, lang)
+      : { label: getLabelForType(hintType, lang), value: '?', note: null, icon: '🔒', iconImg: null };
     return {
       type: hintType,
       revealed,
+      unlockAt,
       ...data,
     };
   });
@@ -131,8 +131,8 @@ function getLabelForType(hintType, lang) {
     type: t.hintType,
     cost: t.hintCost,
     set: t.hintSet,
-    attack: t.hintAttack,
-    health: t.hintHealth,
+    class: t.hintClass,
+    text: t.hintText,
   };
   return map[hintType] || hintType;
 }

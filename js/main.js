@@ -64,7 +64,7 @@ function startNewRound() {
   if (result.restored) {
     // Daily game already completed — show final state
     renderWrongGuesses(gs.wrongGuesses);
-    renderHints(gs.card, gs.hintsRevealed, _lang);
+    renderHints(gs.card, gs.wrongGuesses.length, _lang);
     updateTryCounter(gs.guessesLeft, MAX_GUESSES_UI, _lang);
 
     // Load & reveal the card image
@@ -103,7 +103,7 @@ function handleGuess(card) {
     updateScore(updatedGs.score, updatedGs.streak);
     renderLevel(6); // Full reveal
     revealFull(() => setCardAreaState('win'));
-    renderHints(updatedGs.card, HINT_SEQUENCE.length, _lang);
+    renderHints(updatedGs.card, MAX_GUESSES_UI, _lang);
     renderWrongGuesses(updatedGs.wrongGuesses);
     updateTryCounter(updatedGs.guessesLeft, MAX_GUESSES_UI, _lang);
     showResult(true, updatedGs.card, _lang);
@@ -116,7 +116,7 @@ function handleGuess(card) {
     renderLevel(Math.min(used, 5)); // levels 0-5 during wrong guesses
 
     renderWrongGuesses(updatedGs.wrongGuesses);
-    renderHints(updatedGs.card, updatedGs.hintsRevealed, _lang);
+    renderHints(updatedGs.card, updatedGs.wrongGuesses.length, _lang);
     updateTryCounter(updatedGs.guessesLeft, MAX_GUESSES_UI, _lang);
 
     if (result.result === 'lost') {
@@ -135,7 +135,7 @@ function handleSkip() {
   const updatedGs = getState();
   updateScore(updatedGs.score, updatedGs.streak);
   revealFull(() => setCardAreaState('lose'));
-  renderHints(updatedGs.card, HINT_SEQUENCE.length, _lang);
+  renderHints(updatedGs.card, MAX_GUESSES_UI, _lang);
   showResult(false, updatedGs.card, _lang);
 }
 
@@ -177,7 +177,7 @@ async function handleLangChange(lang) {
   // Re-render hints and other lang-sensitive UI with current game state
   const gs = getState();
   if (gs.card) {
-    renderHints(gs.card, gs.hintsRevealed, lang);
+    renderHints(gs.card, gs.wrongGuesses.length, lang);
     renderWrongGuesses(gs.wrongGuesses);
     updateTryCounter(gs.guessesLeft, MAX_GUESSES_UI, lang);
   }

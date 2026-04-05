@@ -188,6 +188,21 @@ const STAT_ICONS = {
   health: 'logo/Health_icon_large.webp',
 };
 
+const CLASS_NAMES = {
+  MAGE: { fr: 'Mage', en: 'Mage' },
+  WARRIOR: { fr: 'Guerrier', en: 'Warrior' },
+  PALADIN: { fr: 'Paladin', en: 'Paladin' },
+  HUNTER: { fr: 'Chasseur', en: 'Hunter' },
+  ROGUE: { fr: 'Voleur', en: 'Rogue' },
+  PRIEST: { fr: 'Prêtre', en: 'Priest' },
+  SHAMAN: { fr: 'Chaman', en: 'Shaman' },
+  WARLOCK: { fr: 'Démoniste', en: 'Warlock' },
+  DRUID: { fr: 'Druide', en: 'Druid' },
+  DEATHKNIGHT: { fr: 'Chevalier de la mort', en: 'Death Knight' },
+  DEMONHUNTER: { fr: 'Chasseur de démons', en: 'Demon Hunter' },
+  NEUTRAL: { fr: 'Neutre', en: 'Neutral' },
+};
+
 const i18n = {
   fr: {
     title: "HearthBlur",
@@ -210,6 +225,8 @@ const i18n = {
     hintHealth: "Vie",
     hintDurability: "Durabilité",
     hintArmor: "Armure",
+    hintClass: "Classe",
+    hintText: "Texte",
     hintLocked: "🔒",
     hintNA: "—",
     hintNoStats: "Les sorts n'ont pas de stats",
@@ -253,6 +270,8 @@ const i18n = {
     hintHealth: "Health",
     hintDurability: "Durability",
     hintArmor: "Armor",
+    hintClass: "Class",
+    hintText: "Text",
     hintLocked: "🔒",
     hintNA: "—",
     hintNoStats: "Spells have no stats",
