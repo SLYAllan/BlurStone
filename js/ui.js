@@ -145,23 +145,44 @@ function updateTryCounter(guessesLeft, totalGuesses, lang) {
 
 // ---- Hints ----
 
-function renderHints(card, hintsRevealed, lang) {
-  const hints = getAllHints(card, hintsRevealed, lang);
+function renderHints(card, wrongGuessCount, lang) {
+  const baseInfo = getBaseInfo(card, lang);
+  const hints = getAllHints(card, wrongGuessCount, lang);
   el.hintsContainer.innerHTML = '';
 
+  // Render base info (always visible)
+  baseInfo.forEach(info => {
+    const chip = document.createElement('div');
+    chip.className = 'hint-chip hint-revealed hint-base';
+    chip.setAttribute('aria-label', `${info.label}: ${info.value}`);
+
+    const iconHtml = info.iconImg
+      ? `<span class="hint-icon"><img src="${info.iconImg}" class="hint-icon-img" alt=""></span>`
+      : `<span class="hint-icon">${info.icon}</span>`;
+
+    chip.innerHTML = `${iconHtml}<span class="hint-label">${escHtml(info.label)}:</span><span class="hint-value">${escHtml(info.value)}</span>`;
+    el.hintsContainer.appendChild(chip);
+  });
+
+  // Render progressive hints
   hints.forEach(hint => {
     const chip = document.createElement('div');
     chip.className = 'hint-chip' + (hint.revealed ? ' hint-revealed' : ' hint-locked');
+
+    if (hint.type === 'text' && hint.revealed) {
+      chip.classList.add('hint-text-full');
+    }
+
     chip.setAttribute('aria-label', hint.revealed ? `${hint.label}: ${hint.value}` : `${hint.label} verrouillé`);
 
     if (hint.revealed) {
-      chip.innerHTML = `<span class="hint-icon">${hint.icon}</span><span class="hint-label">${escHtml(hint.label)}:</span><span class="hint-value">${escHtml(hint.value)}</span>`;
-      if (hint.note) {
-        chip.title = hint.note;
-        chip.classList.add('hint-has-note');
-      }
+      const iconHtml = hint.iconImg
+        ? `<span class="hint-icon"><img src="${hint.iconImg}" class="hint-icon-img" alt=""></span>`
+        : `<span class="hint-icon">${hint.icon}</span>`;
+      chip.innerHTML = `${iconHtml}<span class="hint-label">${escHtml(hint.label)}:</span><span class="hint-value">${escHtml(hint.value)}</span>`;
     } else {
-      chip.innerHTML = `<span class="hint-icon">🔒</span><span class="hint-label">${escHtml(hint.label)}</span>`;
+      const unlockLabel = lang === 'fr' ? `essai ${hint.unlockAt}` : `guess ${hint.unlockAt}`;
+      chip.innerHTML = `<span class="hint-icon">🔒</span><span class="hint-label">${escHtml(hint.label)}</span><span class="hint-unlock">(${unlockLabel})</span>`;
     }
 
     el.hintsContainer.appendChild(chip);
