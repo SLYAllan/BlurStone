@@ -1,10 +1,23 @@
 // cards.js — Card data fetching, filtering, and autocomplete search
 
 const CARD_API = 'https://api.hearthstonejson.com/v1/latest/{LOCALE}/cards.collectible.json';
-const CACHE_KEY_PREFIX = 'hearthblur_cards_';
+const CACHE_KEY_PREFIX = 'hearthblur_cards_v2_';
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
-const ALLOWED_TYPES = new Set(['MINION', 'SPELL', 'WEAPON', 'LOCATION', 'HERO']);
+const ALLOWED_TYPES = new Set(['MINION', 'SPELL', 'WEAPON', 'LOCATION']);
+
+// Sets to exclude (placeholders, hero skins, missions, etc.)
+const EXCLUDED_SETS = new Set([
+  'PLACEHOLDER',
+  'PLACEHOLDER_202204',
+  'HERO_SKINS',
+  'CREDITS',
+  'MISSIONS',
+  'CHEAT',
+  'TB',
+  'TAVERNS_OF_TIME',
+  'INVALID',
+]);
 
 let _cards = [];
 let _currentLang = 'fr';
@@ -18,7 +31,6 @@ async function loadCards(lang) {
   const locale = getLocale(lang);
   const cacheKey = CACHE_KEY_PREFIX + locale;
 
-  // Try cache first
   try {
     const cached = localStorage.getItem(cacheKey);
     if (cached) {
@@ -28,23 +40,36 @@ async function loadCards(lang) {
         return _cards;
       }
     }
-  } catch (e) {
-    // Cache read failed, proceed to fetch
-  }
+  } catch (e) {}
 
   const url = CARD_API.replace('{LOCALE}', locale);
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to fetch cards: ${response.status}`);
   const raw = await response.json();
 
-  _cards = raw.filter(c => ALLOWED_TYPES.has(c.type));
+  // Filter: only collectible types, exclude bad sets, exclude hero skins
+  let filtered = raw.filter(c => {
+    if (!ALLOWED_TYPES.has(c.type)) return false;
+    if (!c.set || EXCLUDED_SETS.has(c.set)) return false;
+    if (c.set && c.set.toUpperCase().includes('HERO_SKIN')) return false;
+    if (c.set && c.set.toUpperCase().includes('PLACEHOLDER')) return false;
+    if (!c.name || !c.id) return false;
+    return true;
+  });
 
-  // Cache the filtered data
+  // Deduplicate by name (keep first occurrence)
+  const seen = new Set();
+  _cards = [];
+  for (const c of filtered) {
+    const key = c.name.trim().toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    _cards.push(c);
+  }
+
   try {
     localStorage.setItem(cacheKey, JSON.stringify({ data: _cards, timestamp: Date.now() }));
-  } catch (e) {
-    // Storage might be full — ignore
-  }
+  } catch (e) {}
 
   return _cards;
 }
@@ -57,14 +82,6 @@ function getCardById(id) {
   return _cards.find(c => c.id === id) || null;
 }
 
-/**
- * Search cards by name.
- * Returns up to `limit` results, prefix matches ranked before substring matches.
- * @param {string} query
- * @param {number} limit
- * @param {Set<string>} excludeIds - card ids already guessed (shown greyed out)
- * @returns {{ card: object, alreadyGuessed: boolean }[]}
- */
 function searchCards(query, limit = 8, excludeIds = new Set()) {
   if (!query || query.trim().length === 0) return [];
 
@@ -81,7 +98,6 @@ function searchCards(query, limit = 8, excludeIds = new Set()) {
     }
   }
 
-  // Sort each group alphabetically for consistency
   prefixMatches.sort((a, b) => a.name.localeCompare(b.name));
   substringMatches.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -92,29 +108,12 @@ function searchCards(query, limit = 8, excludeIds = new Set()) {
   }));
 }
 
-/**
- * Pick a random card from the loaded set.
- */
 function getRandomCard() {
   if (_cards.length === 0) return null;
   return _cards[Math.floor(Math.random() * _cards.length)];
 }
 
-/**
- * Pick a deterministic card based on a seed (for daily mode).
- * @param {function} rng - seeded random function returning [0,1)
- */
-function getSeededCard(rng) {
-  if (_cards.length === 0) return null;
-  const idx = Math.floor(rng() * _cards.length);
-  return _cards[idx];
-}
-
 function getArtUrl(cardId) {
-  return `https://art.hearthstonejson.com/v1/256x/${cardId}.jpg`;
+  return `https://art.hearthstonejson.com/v1/512x/${cardId}.jpg`;
 }
 
-function getRenderUrl(cardId, lang) {
-  const locale = getLocale(lang);
-  return `https://art.hearthstonejson.com/v1/render/latest/${locale}/256x/${cardId}.png`;
-}
