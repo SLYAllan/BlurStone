@@ -1,7 +1,7 @@
 // canvas.js — Pixelation rendering engine
 
 // Sample grid sizes (level 0 = most pixelated = 8x8, level 6 = full 512x512)
-const PIXEL_LEVELS = [8, 16, 32, 64, 128, 256, 512];
+const PIXEL_LEVELS = [8, 16, 32, 64];
 const CANVAS_SIZE = 512; // display size in px
 const SOURCE_MAX = 512;  // source image size
 
