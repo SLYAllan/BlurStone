@@ -2,7 +2,7 @@
 
 // Pixel grid sizes for each level (0 = most pixelated)
 // 7 levels matching 7 guesses
-const PIXEL_LEVELS = [8, 16, 32, 64, 128, 256, 300];
+const PIXEL_LEVELS = [8, 16, 32, 64, 128, 175, 258];
 const CANVAS_SIZE = 512; // display size in px
 const SOURCE_MAX = 512;  // source image size
 
