@@ -114,6 +114,8 @@ function getRandomCard() {
 }
 
 function getArtUrl(cardId) {
-  return `https://art.hearthstonejson.com/v1/512x/${cardId}.jpg`;
+  // Use images.weserv.nl as CORS proxy so canvas pixelation works
+  const src = `art.hearthstonejson.com/v1/512x/${cardId}.jpg`;
+  return `https://images.weserv.nl/?url=${encodeURIComponent(src)}&n=-1`;
 }
 
