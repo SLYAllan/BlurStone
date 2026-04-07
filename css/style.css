@@ -51,8 +51,66 @@ body {
 /* ---- App Container ---- */
 #app {
   width: 100%;
-  max-width: 460px;
+  max-width: 900px;
   padding: 0 16px;
+}
+
+/* ---- Game Layout (two columns) ---- */
+#game-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+#card-col {
+  flex-shrink: 0;
+}
+
+#info-col {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ---- Card Info panel ---- */
+#card-info {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 12px 16px;
+}
+
+#card-info-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.88rem;
+}
+
+.info-icon-img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.info-label {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.info-value {
+  color: var(--text);
+  font-weight: 600;
 }
 
 /* ---- Header ---- */
@@ -199,9 +257,8 @@ body {
 /* ---- Card Area ---- */
 #card-area {
   position: relative;
-  width: 280px;
-  height: 280px;
-  margin: 0 auto 16px;
+  width: 320px;
+  height: 320px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   background: var(--bg2);
@@ -219,8 +276,8 @@ body {
 
 #card-canvas {
   display: block;
-  width: 280px;
-  height: 280px;
+  width: 320px;
+  height: 320px;
   image-rendering: pixelated;
 }
 
@@ -717,20 +774,45 @@ body {
 }
 
 /* ---- Responsive ---- */
-@media (min-width: 480px) {
+
+/* Desktop: bigger card */
+@media (min-width: 768px) {
   #app {
     padding: 0 24px;
   }
-  #card-area {
-    width: 300px;
-    height: 300px;
-  }
+  #card-area,
   #card-canvas {
-    width: 300px;
-    height: 300px;
+    width: 420px;
+    height: 420px;
   }
   #app-title {
-    font-size: 2.5rem;
+    font-size: 2.75rem;
+  }
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 700px) {
+  #game-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+  #info-col {
+    width: 100%;
+    min-width: unset;
+  }
+  #card-area,
+  #card-canvas {
+    width: 320px;
+    height: 320px;
+  }
+  #card-info-items {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+  #guess-area {
+    align-items: center;
   }
 }
 
@@ -738,13 +820,10 @@ body {
   #app-title {
     font-size: 1.5rem;
   }
-  #card-area {
-    width: 260px;
-    height: 260px;
-  }
+  #card-area,
   #card-canvas {
-    width: 260px;
-    height: 260px;
+    width: 280px;
+    height: 280px;
   }
   .hint-chip {
     font-size: 0.75rem;
