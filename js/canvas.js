@@ -1,8 +1,7 @@
 // canvas.js — Pixelation rendering engine
 
-// Pixel grid sizes for each level (0 = most pixelated)
-// 7 levels matching 7 guesses
-const PIXEL_LEVELS = [8, 16, 32, 64, 128, 175, 258];
+// Sample grid sizes (level 0 = most pixelated = 8x8, level 6 = full 512x512)
+const PIXEL_LEVELS = [8, 16, 32, 64];
 const CANVAS_SIZE = 512; // display size in px
 const SOURCE_MAX = 512;  // source image size
 
@@ -67,7 +66,6 @@ function renderLevel(level) {
   _currentLevel = level;
 
   let gridSize = PIXEL_LEVELS[level] || SOURCE_MAX;
-  // Cap to source resolution (anything beyond is full res)
   if (gridSize > SOURCE_MAX) gridSize = SOURCE_MAX;
 
   if (gridSize >= SOURCE_MAX || !_corsAvailable) {

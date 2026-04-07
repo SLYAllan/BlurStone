@@ -5,7 +5,7 @@ const BASE_INFO = ['set', 'type', 'rarity'];
 
 // Progressive hints revealed at specific wrong guess counts
 const HINT_SEQUENCE = ['cost', 'class', 'text'];
-const HINT_UNLOCK_AT = [2, 4, 6]; // wrong guess # needed to unlock each hint
+const HINT_UNLOCK_AT = [2, 3, 4]; // wrong guess # needed to unlock each hint
 
 /**
  * Compute a hint's display data for a card.
