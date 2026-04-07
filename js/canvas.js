@@ -1,9 +1,7 @@
 // canvas.js — Pixelation rendering engine
 
-// Pixel block sizes in display px (level 0 = most pixelated = biggest blocks)
-// Values ordered: clearest → most pixelated, then reversed so level 0 = 258px blocks
-const PIXEL_BLOCK_SIZES = [8, 16, 32, 64, 128, 175, 258];
-const PIXEL_LEVELS = PIXEL_BLOCK_SIZES.slice().reverse(); // [258,175,128,64,32,16,8]
+// Sample grid sizes (level 0 = most pixelated = 8x8, level 6 = full 512x512)
+const PIXEL_LEVELS = [8, 16, 32, 64, 128, 256, 512];
 const CANVAS_SIZE = 512; // display size in px
 const SOURCE_MAX = 512;  // source image size
 
@@ -67,12 +65,10 @@ function renderLevel(level) {
   if (!_ctx || !_sourceImage) return;
   _currentLevel = level;
 
-  const blockSize = PIXEL_LEVELS[level] || 1;
-  // Convert block size (display px) → sample count
-  let gridSize = Math.max(1, Math.round(CANVAS_SIZE / blockSize));
+  let gridSize = PIXEL_LEVELS[level] || SOURCE_MAX;
   if (gridSize > SOURCE_MAX) gridSize = SOURCE_MAX;
 
-  if (blockSize <= 1 || !_corsAvailable) {
+  if (gridSize >= SOURCE_MAX || !_corsAvailable) {
     _canvas.style.imageRendering = 'auto';
     _ctx.imageSmoothingEnabled = true;
     _ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
