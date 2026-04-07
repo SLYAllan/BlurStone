@@ -113,7 +113,7 @@ function handleGuess(card) {
   if (result.result === 'wrong' || result.result === 'lost') {
     // Advance pixelation level
     const used = MAX_GUESSES_UI - updatedGs.guessesLeft;
-    renderLevel(Math.min(used, 3)); // levels 0-3 during wrong guesses
+    renderLevel(Math.min(used, 4)); // levels 0-4 during wrong guesses
 
     renderWrongGuesses(updatedGs.wrongGuesses);
     renderHints(updatedGs.card, updatedGs.wrongGuesses.length, _lang);
