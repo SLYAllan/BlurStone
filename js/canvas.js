@@ -1,14 +1,17 @@
 // canvas.js — Pixelation rendering engine
 
-// Pixel grid sizes for each level (0 = most pixelated, 6 = full res)
-const PIXEL_LEVELS = [5, 8, 14, 24, 40, 72, 256];
-const CANVAS_SIZE = 280; // display size in px
+// Pixel grid sizes for each level (0 = most pixelated)
+// 7 levels matching 7 guesses
+const PIXEL_LEVELS = [16, 64, 128, 300, 600, 800, 1200];
+const CANVAS_SIZE = 512; // display size in px
+const SOURCE_MAX = 512;  // source image size
 
 let _canvas = null;
 let _ctx = null;
 let _sourceImage = null;
 let _currentLevel = 0;
 let _revealAnimTimer = null;
+let _corsAvailable = true;
 
 function initCanvas(canvasEl) {
   _canvas = canvasEl;
@@ -17,11 +20,6 @@ function initCanvas(canvasEl) {
   _canvas.height = CANVAS_SIZE;
 }
 
-/**
- * Load an image from URL into the canvas engine.
- * Tries with CORS first, then without (no pixelation but at least shows the image).
- * Returns a Promise that resolves when the image is loaded.
- */
 function loadImage(url) {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -32,7 +30,6 @@ function loadImage(url) {
       resolve(img);
     };
     img.onerror = () => {
-      // Retry without CORS — pixelation won't work but image will display
       const img2 = new Image();
       img2.onload = () => {
         _sourceImage = img2;
@@ -40,7 +37,6 @@ function loadImage(url) {
         resolve(img2);
       };
       img2.onerror = () => {
-        // Show placeholder on canvas
         showImageError();
         reject(new Error('Failed to load card art'));
       };
@@ -50,15 +46,13 @@ function loadImage(url) {
   });
 }
 
-let _corsAvailable = true;
-
 function showImageError() {
   if (!_ctx) return;
   _ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-  _ctx.fillStyle = '#1a1410';
+  _ctx.fillStyle = '#0e0b08';
   _ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
   _ctx.fillStyle = '#6a5840';
-  _ctx.font = '14px sans-serif';
+  _ctx.font = '16px sans-serif';
   _ctx.textAlign = 'center';
   _ctx.fillText('Image indisponible', CANVAS_SIZE / 2, CANVAS_SIZE / 2 - 10);
   _ctx.fillText('Image unavailable', CANVAS_SIZE / 2, CANVAS_SIZE / 2 + 10);
@@ -66,48 +60,44 @@ function showImageError() {
 
 /**
  * Render the image at a given pixelation level (0-6).
- * Level 6 = full resolution.
+ * Higher level = clearer image. Level 6 = full resolution.
  */
 function renderLevel(level) {
   if (!_ctx || !_sourceImage) return;
   _currentLevel = level;
 
-  const gridSize = PIXEL_LEVELS[level];
+  let gridSize = PIXEL_LEVELS[level] || SOURCE_MAX;
+  // Cap to source resolution (anything beyond is full res)
+  if (gridSize > SOURCE_MAX) gridSize = SOURCE_MAX;
 
-  if (gridSize >= 256 || !_corsAvailable) {
-    // Full resolution or no CORS (can't pixelate) — draw directly
+  if (gridSize >= SOURCE_MAX || !_corsAvailable) {
     _canvas.style.imageRendering = 'auto';
     _ctx.imageSmoothingEnabled = true;
+    _ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
     _ctx.drawImage(_sourceImage, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
     return;
   }
 
-  // Draw tiny version then scale up without smoothing
   _canvas.style.imageRendering = 'pixelated';
   _ctx.imageSmoothingEnabled = false;
 
-  // Step 1: draw scaled down
+  // Draw scaled down to gridSize then back up without smoothing
+  _ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
   _ctx.drawImage(_sourceImage, 0, 0, gridSize, gridSize);
 
-  // Step 2: read the tiny pixels and draw them back at full size
   try {
     const tiny = _ctx.getImageData(0, 0, gridSize, gridSize);
-
-    // Clear canvas
     _ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
-    // Create offscreen canvas for the tiny image
     const offscreen = document.createElement('canvas');
     offscreen.width = gridSize;
     offscreen.height = gridSize;
     const offCtx = offscreen.getContext('2d');
     offCtx.putImageData(tiny, 0, 0);
 
-    // Scale back up without smoothing
     _ctx.imageSmoothingEnabled = false;
     _ctx.drawImage(offscreen, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
   } catch (e) {
-    // Canvas tainted (CORS issue) — fallback to direct draw
     _corsAvailable = false;
     _canvas.style.imageRendering = 'auto';
     _ctx.imageSmoothingEnabled = true;
@@ -116,22 +106,23 @@ function renderLevel(level) {
   }
 }
 
-/**
- * Animate through levels from `startLevel` to 6, calling onDone when complete.
- * @param {number} startLevel
- * @param {function} onDone
- */
 function animateReveal(startLevel, onDone) {
   if (_revealAnimTimer) clearTimeout(_revealAnimTimer);
 
+  const target = PIXEL_LEVELS.length - 1;
   let level = startLevel;
 
   function step() {
     renderLevel(level);
-    if (level < 6) {
+    if (level < target) {
       level++;
-      _revealAnimTimer = setTimeout(step, 120);
+      _revealAnimTimer = setTimeout(step, 100);
     } else {
+      // Final full render
+      _canvas.style.imageRendering = 'auto';
+      _ctx.imageSmoothingEnabled = true;
+      _ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+      if (_sourceImage) _ctx.drawImage(_sourceImage, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
       _revealAnimTimer = null;
       if (onDone) onDone();
     }
@@ -140,9 +131,6 @@ function animateReveal(startLevel, onDone) {
   step();
 }
 
-/**
- * Immediately show full resolution with a smooth transition.
- */
 function revealFull(onDone) {
   animateReveal(_currentLevel, onDone);
 }

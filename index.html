@@ -41,55 +41,38 @@
       </div>
     </div>
 
-    <!-- Mode tabs -->
-    <div id="mode-tabs" role="tablist" aria-label="Mode de jeu">
-      <button class="mode-btn active" data-mode="unlimited" role="tab" aria-selected="true">Illimité</button>
-      <button class="mode-btn" data-mode="daily" role="tab" aria-selected="false">Quotidien</button>
+    <!-- Base info above the card (set + type + rarity) -->
+    <div id="card-info" aria-label="Informations de la carte">
+      <div id="card-info-items"></div>
     </div>
 
-    <!-- Game layout: image left, info right -->
-    <div id="game-layout">
-
-      <!-- Left: Card artwork -->
-      <div id="card-col">
-        <div id="card-area" aria-label="Illustration de la carte">
-          <canvas id="card-canvas" role="img" aria-label="Illustration pixelisée de la carte"></canvas>
-          <!-- Result overlay (win/lose) -->
-          <div id="result-overlay" class="result-overlay hidden" aria-live="assertive" role="status">
-            <div id="result-text"></div>
-            <div id="result-card"></div>
-          </div>
-        </div>
+    <!-- Card artwork -->
+    <div id="card-area" aria-label="Illustration de la carte">
+      <canvas id="card-canvas" role="img" aria-label="Illustration pixelisée de la carte"></canvas>
+      <div id="result-overlay" class="result-overlay hidden" aria-live="assertive" role="status">
+        <div id="result-text"></div>
+        <div id="result-card"></div>
       </div>
+    </div>
 
-      <!-- Right: Info panel -->
-      <div id="info-col">
-        <!-- Base info (extension + type) -->
-        <div id="card-info" aria-label="Informations de la carte">
-          <div id="card-info-items"></div>
-        </div>
+    <!-- Try counter + dots -->
+    <div id="guess-area" aria-label="Progression des essais">
+      <div id="try-counter" aria-live="polite">Essai 0/7</div>
+      <div id="guess-dots" role="group" aria-label="Essais utilisés"></div>
+      <span id="remaining-text" aria-live="polite">7 essais restants</span>
+    </div>
 
-        <!-- Try counter + dots -->
-        <div id="guess-area" aria-label="Progression des essais">
-          <div id="try-counter" aria-live="polite">Essai 0/7</div>
-          <div id="guess-dots" role="group" aria-label="Essais utilisés"></div>
-          <span id="remaining-text" aria-live="polite">7 essais restants</span>
-        </div>
+    <!-- Hints -->
+    <section id="hints-section" aria-label="Indices">
+      <div id="hints-label">Indices</div>
+      <div id="hints-container" role="list" aria-label="Indices révélés"></div>
+    </section>
 
-        <!-- Hints -->
-        <section id="hints-section" aria-label="Indices">
-          <div id="hints-label">Indices</div>
-          <div id="hints-container" role="list" aria-label="Indices révélés"></div>
-        </section>
-
-        <!-- Wrong guesses -->
-        <section id="wrong-section" aria-label="Mauvaises réponses">
-          <div id="wrong-label">Mauvaises réponses</div>
-          <div id="wrong-guesses" role="list" aria-label="Cartes incorrectes devinées"></div>
-        </section>
-      </div>
-
-    </div><!-- /#game-layout -->
+    <!-- Wrong guesses -->
+    <section id="wrong-section" aria-label="Mauvaises réponses">
+      <div id="wrong-label">Mauvaises réponses</div>
+      <div id="wrong-guesses" role="list" aria-label="Cartes incorrectes devinées"></div>
+    </section>
 
     <!-- Search input + autocomplete -->
     <div id="search-wrapper">

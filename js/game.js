@@ -1,6 +1,6 @@
 // game.js — Game state management and logic
 
-const MAX_GUESSES = 6;
+const MAX_GUESSES = 7;
 
 // Game state
 let state = {

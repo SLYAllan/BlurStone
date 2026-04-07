@@ -34,7 +34,7 @@ function initUI(callbacks) {
   el.skipBtn = document.getElementById('skip-btn');
   el.nextBtn = document.getElementById('next-btn');
   el.shareBtn = document.getElementById('share-btn');
-  el.modeBtns = document.querySelectorAll('.mode-btn');
+  el.modeBtns = document.querySelectorAll('.mode-btn'); // empty after daily removal
   el.langBtn = document.getElementById('lang-btn');
   el.loadingOverlay = document.getElementById('loading-overlay');
   el.resultOverlay = document.getElementById('result-overlay');
@@ -148,21 +148,23 @@ function updateTryCounter(guessesLeft, totalGuesses, lang) {
 function renderHints(card, wrongGuessCount, lang) {
   const baseInfo = getBaseInfo(card, lang);
   const hints = getAllHints(card, wrongGuessCount, lang);
+
+  // Render base info ABOVE the card (set + type + rarity)
+  const baseContainer = document.getElementById('card-info-items');
+  if (baseContainer) {
+    baseContainer.innerHTML = '';
+    baseInfo.forEach(info => {
+      const item = document.createElement('div');
+      item.className = 'card-info-item';
+      const iconHtml = info.iconImg
+        ? `<img src="${info.iconImg}" class="info-icon-img" alt="">`
+        : `<span class="hint-icon">${info.icon}</span>`;
+      item.innerHTML = `${iconHtml}<span class="info-label">${escHtml(info.label)}:</span><span class="info-value">${escHtml(info.value)}</span>`;
+      baseContainer.appendChild(item);
+    });
+  }
+
   el.hintsContainer.innerHTML = '';
-
-  // Render base info (always visible)
-  baseInfo.forEach(info => {
-    const chip = document.createElement('div');
-    chip.className = 'hint-chip hint-revealed hint-base';
-    chip.setAttribute('aria-label', `${info.label}: ${info.value}`);
-
-    const iconHtml = info.iconImg
-      ? `<span class="hint-icon"><img src="${info.iconImg}" class="hint-icon-img" alt=""></span>`
-      : `<span class="hint-icon">${info.icon}</span>`;
-
-    chip.innerHTML = `${iconHtml}<span class="hint-label">${escHtml(info.label)}:</span><span class="hint-value">${escHtml(info.value)}</span>`;
-    el.hintsContainer.appendChild(chip);
-  });
 
   // Render progressive hints
   hints.forEach(hint => {

@@ -1,7 +1,7 @@
 // hints.js — Hint computation for each card type
 
 // Base info (always visible from the start)
-const BASE_INFO = ['set', 'type'];
+const BASE_INFO = ['set', 'type', 'rarity'];
 
 // Progressive hints revealed at specific wrong guess counts
 const HINT_SEQUENCE = ['cost', 'class', 'text'];
@@ -79,6 +79,19 @@ function getHintData(card, hintType, lang) {
         note: null,
         icon: '📜',
         iconImg: null,
+      };
+    }
+
+    case 'rarity': {
+      const rarity = card.rarity || 'FREE';
+      const rarityIcon = RARITY_ICONS[rarity] || null;
+      const rarityName = (RARITY_NAMES[rarity] && RARITY_NAMES[rarity][lang]) || rarity;
+      return {
+        label: t.hintRarity,
+        value: rarityName,
+        note: null,
+        icon: '⭐',
+        iconImg: rarityIcon,
       };
     }
 

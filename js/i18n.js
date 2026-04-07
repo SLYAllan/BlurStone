@@ -188,6 +188,14 @@ const STAT_ICONS = {
   health: 'logo/Health_icon_large.webp',
 };
 
+const RARITY_NAMES = {
+  FREE: { fr: 'Gratuite', en: 'Free' },
+  COMMON: { fr: 'Commune', en: 'Common' },
+  RARE: { fr: 'Rare', en: 'Rare' },
+  EPIC: { fr: 'Épique', en: 'Epic' },
+  LEGENDARY: { fr: 'Légendaire', en: 'Legendary' },
+};
+
 const CLASS_NAMES = {
   MAGE: { fr: 'Mage', en: 'Mage' },
   WARRIOR: { fr: 'Guerrier', en: 'Warrior' },
@@ -227,6 +235,7 @@ const i18n = {
     hintArmor: "Armure",
     hintClass: "Classe",
     hintText: "Texte",
+    hintRarity: "Rareté",
     hintLocked: "🔒",
     hintNA: "—",
     hintNoStats: "Les sorts n'ont pas de stats",
@@ -236,7 +245,7 @@ const i18n = {
     typeLocation: "Lieu",
     typeHero: "Héros",
     howTo: "Comment jouer",
-    howToText: "L'illustration d'une carte Hearthstone est pixelisée. Tapez un nom de carte pour deviner. À chaque erreur, l'image se dépixelise et un nouvel indice apparaît. Vous avez 6 essais.",
+    howToText: "L'illustration d'une carte Hearthstone est pixelisée. Tapez un nom de carte pour deviner. À chaque erreur, l'image se dépixelise et un nouvel indice apparaît. Vous avez 7 essais.",
     daily: "Quotidien",
     unlimited: "Illimité",
     shareText: "HearthBlur 🟦🟦🟦\nJ'ai trouvé en {n} essai(s) !\n🔥 Série : {streak}\nhttps://slyallan.github.io/BlurStone",
@@ -272,6 +281,7 @@ const i18n = {
     hintArmor: "Armor",
     hintClass: "Class",
     hintText: "Text",
+    hintRarity: "Rarity",
     hintLocked: "🔒",
     hintNA: "—",
     hintNoStats: "Spells have no stats",
@@ -281,7 +291,7 @@ const i18n = {
     typeLocation: "Location",
     typeHero: "Hero",
     howTo: "How to play",
-    howToText: "A Hearthstone card's artwork is pixelated. Type a card name to guess. Each wrong guess de-pixelates the image and reveals a new hint. You have 6 tries.",
+    howToText: "A Hearthstone card's artwork is pixelated. Type a card name to guess. Each wrong guess de-pixelates the image and reveals a new hint. You have 7 tries.",
     daily: "Daily",
     unlimited: "Unlimited",
     shareText: "HearthBlur 🟦🟦🟦\nI got it in {n} guess(es)!\n🔥 Streak: {streak}\nhttps://slyallan.github.io/BlurStone",
